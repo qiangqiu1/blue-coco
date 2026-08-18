@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>coconana 生日快乐 🎂</title>
+<title>coconana 生日快乐 🏳️‍🌈</title>
 <style>
 /* ==================== 基础样式 ==================== */
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -98,7 +98,7 @@ html, body {
 }
 .layer.top {
   bottom: 96px; width: 130px; height: 44px;
-  background: linear-gradient(180deg, #ffb6c1 0%, #ff8fa3 100%);
+  background: linear-gradient(90deg, #e40303 0%, #ff8c00 20%, #ffed00 40%, #008026 60%, #004cff 80%, #732982 100%);
 }
 .layer.top::before {
   content: ""; position: absolute; top: -12px; left: 0; right: 0; height: 14px;
@@ -132,7 +132,7 @@ html, body {
 
 .intro .title {
   font-size: 40px; font-weight: 800; letter-spacing: 8px;
-  background: linear-gradient(90deg, #ffd93d, #ff9f43, #ff6b9d, #ffd93d);
+  background: linear-gradient(90deg, #e40303, #ff8c00, #ffed00, #008026, #004cff, #732982, #e40303);
   background-size: 300% 100%;
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -191,7 +191,7 @@ main.show { display: flex; animation: mainIn .9s ease both; }
 .hero .happy {
   font-size: clamp(34px, 9vw, 54px);
   font-weight: 800; letter-spacing: 10px;
-  background: linear-gradient(90deg, #ffd93d, #ff9f43, #ff6b9d, #c084fc, #ffd93d);
+  background: linear-gradient(90deg, #e40303, #ff8c00, #ffed00, #008026, #004cff, #732982, #e40303);
   background-size: 300% 100%;
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -204,14 +204,22 @@ main.show { display: flex; animation: mainIn .9s ease both; }
   color: #ffd6e7;
   text-shadow: 0 0 18px rgba(255,143,163,.7);
 }
+.rainbow-bar {
+  width: min(240px, 60vw); height: 7px;
+  margin: 18px auto 0;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #e40303, #ff8c00, #ffed00, #008026, #004cff, #732982);
+  box-shadow: 0 0 18px rgba(255,255,255,.25);
+}
 
 /* --- 惊喜礼物 --- */
 .gifts { width: 100%; max-width: 520px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .gifts-title {
   font-size: clamp(20px, 5.5vw, 26px);
   font-weight: 700; letter-spacing: 4px;
-  color: #ffd6e7;
-  text-shadow: 0 0 16px rgba(255,143,163,.6);
+  background: linear-gradient(90deg, #e40303, #ff8c00, #ffed00, #008026, #004cff, #732982);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 .gifts-grid {
   display: grid;
@@ -351,9 +359,18 @@ main.show { display: flex; animation: mainIn .9s ease both; }
 .blessing .card p:first-child {
   font-size: clamp(21px, 5.6vw, 27px);
   font-weight: 700;
-  color: #ffd93d;
   margin-bottom: 6px;
+  background: linear-gradient(90deg, #e40303, #ff8c00, #ffed00, #008026, #004cff, #732982);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
+.blessing .card p.sign {
+  margin-top: 14px;
+  font-size: 17px;
+  color: rgba(255,255,255,.75);
+  letter-spacing: 3px;
+}
+.blessing .card.show p.sign { transition-delay: .85s; }
 
 footer {
   font-size: 13px; color: rgba(255,255,255,.5);
@@ -404,7 +421,7 @@ footer {
   </div>
   <div class="title">生日快乐</div>
   <div class="name">coconana</div>
-  <div class="hint">有一份小小的惊喜，请戴上耳机 🎧</div>
+  <div class="hint">有一份小小的惊喜，请戴上耳机 🎧 🏳️‍🌈</div>
   <button id="openBtn">✨ 点击开启祝福 ✨</button>
 </div>
 
@@ -413,12 +430,13 @@ footer {
   <section class="hero">
     <div class="happy">生 日 快 乐</div>
     <div class="name">coconana</div>
+    <div class="rainbow-bar"></div>
   </section>
 
   <section class="gifts">
     <div class="gifts-title">🎁 惊喜礼物</div>
     <div class="gifts-grid" id="giftsGrid"></div>
-    <div class="photo-hint">点击礼物盒，拆开你的惊喜</div>
+    <div class="photo-hint">点击礼物盒，拆开你的惊喜 💪</div>
   </section>
 
   <section class="blessing">
@@ -426,10 +444,11 @@ footer {
       <p>祝题宝生日快乐</p>
       <p>一祝手边多银财</p>
       <p>二祝方寸永不乱</p>
+      <p class="sign">❤️ 爱你的 blue</p>
     </div>
   </section>
 
-  <footer>🎆 点击屏幕任意处，绽放烟花</footer>
+  <footer>🎆 点击屏幕任意处，绽放烟花 · 🏳️‍🌈 Love Wins 💪</footer>
 </main>
 
 <!-- 照片灯箱 -->
@@ -455,7 +474,23 @@ footer {
    ============================================================ */
 const NAME = 'coconana';                 // 页面大标题显示的名字
 // 照片列表：把新照片放进 photos/ 文件夹，然后在这里添加文件名即可
-const PHOTOS = ['photos/1.jpg'];
+const PHOTOS = [
+  'photos/1.jpg',
+  'photos/86dfb049055da03589b7c0869854ab30.jpg',
+  'photos/90155ef817bf4b0f87ba88f24c63037e.jpg',
+  'photos/eb27c171fd8cf8964ec768050486bb0c.jpg',
+  'photos/3c952a5905d0e8dae906051498167eac.jpg',
+  'photos/60f68be02c4639db23afb698d7558267.jpg',
+  'photos/0e8be433916c3d60feab6abfcb27fcc6.jpg',
+  'photos/0c23218d613ad306aa2d9b19bbf9a054.jpg',
+  'photos/6a2959ca05e4f196493f68137458a404.jpg',
+  'photos/bbb8cbbb06d98489ff0c64a1844612c8.jpg',
+  'photos/5a5fd8254d48b94cebd4015a135dcb5b.jpg',
+  'photos/1653202aa505eb1d21b02e2f5c4716b1.jpg',
+  'photos/4f6e258dc33513a1c9b6a0804a8f4de9.jpg',
+  'photos/3cda5d9355f5a71fae92d5120d2ba553.jpg',
+  'photos/9eada5eb115dbeb60422a50e418f3d7f.jpg'
+];
 
 /* ============================================================
    工具函数
@@ -487,15 +522,20 @@ const $ = (id) => document.getElementById(id);
 const balloons = $('balloons');
 let balloonTimer = null;
 
+/* 漂浮元素：气球为主，混入彩虹旗和肌肉猛男 💪 */
+const FLOAT_EMOJIS = ['🎈', '🎈', '🎈', '🏳️‍🌈', '💪', '🌈'];
+
 function spawnBalloon() {
   if (document.hidden) return;
   const el = document.createElement('div');
   el.className = 'balloon';
-  el.textContent = '🎈';
+  const emoji = FLOAT_EMOJIS[Math.floor(Math.random() * FLOAT_EMOJIS.length)];
+  el.textContent = emoji;
   el.style.left = (2 + Math.random() * 92) + 'vw';
   el.style.fontSize = (26 + Math.random() * 38) + 'px';
   el.style.animationDuration = (9 + Math.random() * 7) + 's';
-  el.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg)';
+  /* 只有气球才变色，💪 和旗帜保持原色 */
+  if (emoji === '🎈') el.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg)';
   el.style.opacity = (0.55 + Math.random() * 0.45).toFixed(2);
   balloons.appendChild(el);
   setTimeout(() => el.remove(), 18000);
@@ -523,7 +563,8 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-const PALETTE = ['#ff6b9d', '#ffd93d', '#6bcbff', '#a8e06b', '#ff9f43', '#c084fc', '#ff5e5e', '#4dd0e1'];
+/* 骄傲彩虹配色 */
+const PALETTE = ['#e40303', '#ff8c00', '#ffed00', '#008026', '#004cff', '#732982', '#ff6b9d', '#ffffff'];
 const particles = [];      // 所有特效粒子（彩带碎屑 / 烟花碎片）
 const rockets = [];        // 上升中的烟花弹
 
