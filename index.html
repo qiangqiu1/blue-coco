@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>coconana 生日快乐 🎂</title>
+<style>
+/* ==================== 基础样式 ==================== */
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: linear-gradient(160deg, #1a1035 0%, #2d1b4e 35%, #43255e 65%, #5b2a6b 100%);
+  color: #fff;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ==================== 星空背景 ==================== */
+.stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle 2.5s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: .15; transform: scale(.8); }
+  50%      { opacity: .9;  transform: scale(1.2); }
+}
+
+/* ==================== 气球层 ==================== */
+.balloons { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.balloon {
+  position: absolute;
+  bottom: -15%;
+  animation: balloonRise linear forwards;
+  will-change: transform;
+}
+@keyframes balloonRise {
+  0%   { transform: translateY(0) translateX(0) rotate(-4deg); }
+  25%  { transform: translateY(-28vh) translateX(4vw) rotate(5deg); }
+  50%  { transform: translateY(-56vh) translateX(-5vw) rotate(-6deg); }
+  75%  { transform: translateY(-84vh) translateX(3vw) rotate(5deg); }
+  100% { transform: translateY(-120vh) translateX(-2vw) rotate(-3deg); }
+}
+
+/* ==================== 特效画布 ==================== */
+#fx { position: fixed; inset: 0; z-index: 40; pointer-events: none; }
+
+/* ==================== 首屏引导 ==================== */
+.intro {
+  position: fixed; inset: 0; z-index: 10;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px;
+  text-align: center;
+  transition: opacity .6s ease, transform .6s ease;
+  padding: 20px;
+}
+.intro.fade-out { opacity: 0; transform: scale(1.08); pointer-events: none; }
+
+/* --- CSS 蛋糕 --- */
+.cake { position: relative; width: 200px; height: 210px; margin-bottom: 6px; animation: cakeBounce 2.6s ease-in-out infinite; }
+@keyframes cakeBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+.candle {
+  position: absolute; width: 10px; height: 34px; border-radius: 4px;
+  background: repeating-linear-gradient(135deg, #ffd93d 0 6px, #fff 6px 12px);
+  left: 50%; top: 2px;
+}
+.candle::after {
+  content: ""; position: absolute; left: -2px; top: -2px;
+  width: 14px; height: 3px; border-radius: 50%;
+  background: #ffd93d;
+}
+.c1 { transform: translateX(-42px); }
+.c2 { transform: translateX(-5px);  height: 42px; top: -6px; }
+.c3 { transform: translateX(32px); }
+.flame {
+  position: absolute; left: 50%; top: -22px; width: 12px; height: 18px;
+  margin-left: -6px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 50% 80%, #fff 0%, #ffd93d 45%, #ff9f43 75%, transparent 100%);
+  transform-origin: 50% 100%;
+  animation: flicker .18s ease-in-out infinite alternate;
+  box-shadow: 0 0 16px 6px rgba(255, 200, 80, .55);
+}
+@keyframes flicker {
+  from { transform: scale(1) rotate(-3deg); }
+  to   { transform: scale(1.15, 1.25) rotate(3deg); }
+}
+.layer {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  border-radius: 14px;
+}
+.layer.top {
+  bottom: 96px; width: 130px; height: 44px;
+  background: linear-gradient(180deg, #ffb6c1 0%, #ff8fa3 100%);
+}
+.layer.top::before {
+  content: ""; position: absolute; top: -12px; left: 0; right: 0; height: 14px;
+  background: radial-gradient(circle at 10px 0, #fff 0 9px, transparent 10px) repeat-x;
+  background-size: 26px 14px;
+}
+.layer.mid {
+  bottom: 52px; width: 170px; height: 50px;
+  background: linear-gradient(180deg, #fff3d6 0%, #ffe3a3 100%);
+}
+.layer.mid::before {
+  content: ""; position: absolute; top: -12px; left: 0; right: 0; height: 14px;
+  background: radial-gradient(circle at 10px 0, #ff9fbf 0 9px, transparent 10px) repeat-x;
+  background-size: 30px 14px;
+}
+.layer.bottom {
+  bottom: 8px; width: 190px; height: 52px;
+  background: linear-gradient(180deg, #ff8fa3 0%, #ff6b81 100%);
+}
+.layer.bottom::before {
+  content: ""; position: absolute; top: -12px; left: 0; right: 0; height: 14px;
+  background: radial-gradient(circle at 10px 0, #ffe3a3 0 9px, transparent 10px) repeat-x;
+  background-size: 32px 14px;
+}
+.plate {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 210px; height: 12px; border-radius: 50%;
+  background: linear-gradient(180deg, #e8e4ff, #b9aede);
+  box-shadow: 0 4px 14px rgba(0,0,0,.35);
+}
+
+.intro .title {
+  font-size: 40px; font-weight: 800; letter-spacing: 8px;
+  background: linear-gradient(90deg, #ffd93d, #ff9f43, #ff6b9d, #ffd93d);
+  background-size: 300% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+  text-shadow: none;
+}
+@keyframes shimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+.intro .name {
+  font-size: 30px; font-weight: 700; letter-spacing: 2px;
+  color: #ffd6e7;
+  animation: pulseGlow 2.4s ease-in-out infinite;
+}
+@keyframes pulseGlow {
+  0%, 100% { text-shadow: 0 0 10px rgba(255,143,163,.4); }
+  50%      { text-shadow: 0 0 26px rgba(255,143,163,.95); }
+}
+.intro .hint { font-size: 14px; color: rgba(255,255,255,.55); letter-spacing: 1px; }
+
+#openBtn {
+  margin-top: 10px;
+  padding: 15px 42px;
+  font-size: 18px; font-weight: 700; letter-spacing: 2px;
+  color: #5b2a6b;
+  background: linear-gradient(135deg, #ffd93d, #ffb84d);
+  border: none; border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(255, 200, 80, .45);
+  animation: btnBreath 2s ease-in-out infinite;
+  transition: transform .15s ease;
+}
+#openBtn:active { transform: scale(.94); }
+@keyframes btnBreath {
+  0%, 100% { box-shadow: 0 6px 24px rgba(255,200,80,.45); }
+  50%      { box-shadow: 0 6px 40px rgba(255,200,80,.85); }
+}
+
+/* ==================== 主内容 ==================== */
+main {
+  position: relative; z-index: 2;
+  display: none;
+  flex-direction: column; align-items: center;
+  min-height: 100vh;
+  padding: 60px 20px 90px;
+  gap: 44px;
+}
+main.show { display: flex; animation: mainIn .9s ease both; }
+@keyframes mainIn {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero { text-align: center; margin-top: 8vh; }
+.hero .happy {
+  font-size: clamp(34px, 9vw, 54px);
+  font-weight: 800; letter-spacing: 10px;
+  background: linear-gradient(90deg, #ffd93d, #ff9f43, #ff6b9d, #c084fc, #ffd93d);
+  background-size: 300% 100%;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s linear infinite;
+}
+.hero .name {
+  margin-top: 14px;
+  font-size: clamp(24px, 6.5vw, 36px);
+  font-weight: 700; letter-spacing: 3px;
+  color: #ffd6e7;
+  text-shadow: 0 0 18px rgba(255,143,163,.7);
+}
+
+/* --- 惊喜礼物 --- */
+.gifts { width: 100%; max-width: 520px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.gifts-title {
+  font-size: clamp(20px, 5.5vw, 26px);
+  font-weight: 700; letter-spacing: 4px;
+  color: #ffd6e7;
+  text-shadow: 0 0 16px rgba(255,143,163,.6);
+}
+.gifts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  width: 100%;
+}
+.gift {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  background: rgba(255,255,255,.06);
+  border: 1.5px solid rgba(255,255,255,.18);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 46px;
+  overflow: hidden;
+  animation: giftIdle 3s ease-in-out infinite;
+  transition: border-color .3s ease, background .3s ease;
+}
+.gift:nth-child(2n) { animation-delay: .45s; }
+.gift:nth-child(3n) { animation-delay: .9s; }
+@keyframes giftIdle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-6px) rotate(-2deg); }
+}
+.gift:active { transform: scale(.92); }
+.gift.shaking { animation: giftShake .5s ease; }
+@keyframes giftShake {
+  0%, 100% { transform: rotate(0) scale(1); }
+  20%      { transform: rotate(-10deg) scale(1.08); }
+  40%      { transform: rotate(10deg) scale(1.14); }
+  60%      { transform: rotate(-8deg) scale(1.1); }
+  80%      { transform: rotate(6deg) scale(1.04); }
+}
+.gift.opened {
+  animation: none;
+  border-color: rgba(255, 217, 61, .65);
+  background: rgba(255, 255, 255, .12);
+}
+.gift.opened img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  animation: giftReveal .6s cubic-bezier(.34, 1.56, .64, 1);
+}
+@keyframes giftReveal {
+  from { transform: scale(1.6) rotate(8deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0); opacity: 1; }
+}
+.gift-tag {
+  position: absolute; top: 6px; right: 9px;
+  font-size: 11px; font-weight: 700;
+  color: rgba(255,255,255,.55);
+  letter-spacing: 1px;
+}
+.photo-hint { font-size: 12px; color: rgba(255,255,255,.45); letter-spacing: 1px; }
+
+/* --- 照片灯箱 --- */
+.lightbox {
+  position: fixed; inset: 0; z-index: 30;
+  background: rgba(10, 5, 25, .9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity .35s ease;
+}
+.lightbox.show { opacity: 1; pointer-events: auto; }
+.lb-body {
+  display: flex; flex-direction: column; align-items: center;
+  transform: scale(.72);
+  transition: transform .4s cubic-bezier(.34, 1.56, .64, 1);
+}
+.lightbox.show .lb-body { transform: scale(1); }
+.lb-body img {
+  max-width: 88vw; max-height: 70vh;
+  border-radius: 16px;
+  border: 2px solid rgba(255,255,255,.22);
+  box-shadow: 0 16px 60px rgba(0,0,0,.6);
+}
+.lb-count { margin-top: 14px; font-size: 14px; color: rgba(255,255,255,.75); letter-spacing: 2px; }
+.lb-close {
+  position: fixed; top: 14px; right: 16px;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.3);
+  background: rgba(255,255,255,.12);
+  color: #fff; font-size: 17px;
+  cursor: pointer;
+}
+.lb-prev, .lb-next {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  width: 42px; height: 56px;
+  border: none; background: rgba(255,255,255,.1);
+  color: #fff; font-size: 26px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.lb-prev { left: 8px; }
+.lb-next { right: 8px; }
+.lb-prev.hidden, .lb-next.hidden { display: none; }
+
+/* --- 祝福卡片 --- */
+.blessing { width: 100%; max-width: 520px; }
+.blessing .card {
+  position: relative;
+  padding: 44px 28px 40px;
+  border-radius: 20px;
+  text-align: center;
+  background: rgba(255,255,255,.07);
+  border: 1.5px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 10px 40px rgba(0,0,0,.3);
+  overflow: hidden;
+}
+.blessing .card::before, .blessing .card::after {
+  content: "🎂";
+  position: absolute;
+  font-size: 18px;
+  opacity: .8;
+}
+.blessing .card::before { top: 12px; left: 16px; }
+.blessing .card::after  { bottom: 12px; right: 16px; transform: scaleX(-1); }
+.blessing .card p {
+  font-size: clamp(19px, 5vw, 24px);
+  line-height: 2.1;
+  letter-spacing: 2px;
+  color: #fff0f6;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .8s ease, transform .8s ease;
+}
+.blessing .card.show p { opacity: 1; transform: translateY(0); }
+.blessing .card.show p:nth-child(1) { transition-delay: .1s; }
+.blessing .card.show p:nth-child(2) { transition-delay: .35s; }
+.blessing .card.show p:nth-child(3) { transition-delay: .6s; }
+.blessing .card p:first-child {
+  font-size: clamp(21px, 5.6vw, 27px);
+  font-weight: 700;
+  color: #ffd93d;
+  margin-bottom: 6px;
+}
+
+footer {
+  font-size: 13px; color: rgba(255,255,255,.5);
+  letter-spacing: 1px; text-align: center;
+  animation: pulseGlow 3s ease-in-out infinite;
+}
+
+/* --- 音乐按钮 --- */
+.music-btn {
+  position: fixed; right: 18px; bottom: 26px; z-index: 20;
+  width: 52px; height: 52px; border-radius: 50%;
+  border: none; cursor: pointer;
+  font-size: 22px;
+  background: rgba(255,255,255,.14);
+  border: 1.5px solid rgba(255,255,255,.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: transform .2s ease;
+}
+.music-btn:active { transform: scale(.9); }
+.music-btn.playing { animation: discSpin 5s linear infinite; }
+.music-btn.hidden { display: none; }
+@keyframes discSpin {
+  from { transform: rotate(0); }
+  to   { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<!-- 星空背景 -->
+<div class="stars" id="stars"></div>
+<!-- 气球层 -->
+<div class="balloons" id="balloons"></div>
+<!-- 特效画布（彩带 / 烟花） -->
+<canvas id="fx"></canvas>
+
+<!-- ==================== 首屏引导 ==================== -->
+<div class="intro" id="intro">
+  <div class="cake">
+    <div class="candle c1"><div class="flame"></div></div>
+    <div class="candle c2"><div class="flame"></div></div>
+    <div class="candle c3"><div class="flame"></div></div>
+    <div class="layer top"></div>
+    <div class="layer mid"></div>
+    <div class="layer bottom"></div>
+    <div class="plate"></div>
+  </div>
+  <div class="title">生日快乐</div>
+  <div class="name">coconana</div>
+  <div class="hint">有一份小小的惊喜，请戴上耳机 🎧</div>
+  <button id="openBtn">✨ 点击开启祝福 ✨</button>
+</div>
+
+<!-- ==================== 主内容 ==================== -->
+<main id="main">
+  <section class="hero">
+    <div class="happy">生 日 快 乐</div>
+    <div class="name">coconana</div>
+  </section>
+
+  <section class="gifts">
+    <div class="gifts-title">🎁 惊喜礼物</div>
+    <div class="gifts-grid" id="giftsGrid"></div>
+    <div class="photo-hint">点击礼物盒，拆开你的惊喜</div>
+  </section>
+
+  <section class="blessing">
+    <div class="card" id="blessCard">
+      <p>祝题宝生日快乐</p>
+      <p>一祝手边多银财</p>
+      <p>二祝方寸永不乱</p>
+    </div>
+  </section>
+
+  <footer>🎆 点击屏幕任意处，绽放烟花</footer>
+</main>
+
+<!-- 照片灯箱 -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" title="关闭">✕</button>
+  <button class="lb-prev hidden" id="lbPrev" title="上一张">‹</button>
+  <div class="lb-body">
+    <img id="lbImg" alt="照片">
+    <div class="lb-count" id="lbCount"></div>
+  </div>
+  <button class="lb-next hidden" id="lbNext" title="下一张">›</button>
+</div>
+
+<!-- 音乐控制按钮 -->
+<button class="music-btn hidden" id="musicBtn" title="播放/暂停音乐">🎵</button>
+
+<!-- 背景音乐 -->
+<audio id="bgm" src="music/bgm.mp3" loop preload="auto"></audio>
+
+<script>
+/* ============================================================
+   配置区：以后想改内容，只需要改这里
+   ============================================================ */
+const NAME = 'coconana';                 // 页面大标题显示的名字
+// 照片列表：把新照片放进 photos/ 文件夹，然后在这里添加文件名即可
+const PHOTOS = ['photos/1.jpg'];
+
+/* ============================================================
+   工具函数
+   ============================================================ */
+const $ = (id) => document.getElementById(id);
+
+/* ============================================================
+   星空背景
+   ============================================================ */
+(function initStars() {
+  const box = $('stars');
+  for (let i = 0; i < 110; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = 1 + Math.random() * 2;
+    s.style.width = size + 'px';
+    s.style.height = size + 'px';
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.top = Math.random() * 100 + 'vh';
+    s.style.animationDelay = Math.random() * 3 + 's';
+    s.style.animationDuration = (1.6 + Math.random() * 2.6) + 's';
+    box.appendChild(s);
+  }
+})();
+
+/* ============================================================
+   气球动画
+   ============================================================ */
+const balloons = $('balloons');
+let balloonTimer = null;
+
+function spawnBalloon() {
+  if (document.hidden) return;
+  const el = document.createElement('div');
+  el.className = 'balloon';
+  el.textContent = '🎈';
+  el.style.left = (2 + Math.random() * 92) + 'vw';
+  el.style.fontSize = (26 + Math.random() * 38) + 'px';
+  el.style.animationDuration = (9 + Math.random() * 7) + 's';
+  el.style.filter = 'hue-rotate(' + Math.random() * 360 + 'deg)';
+  el.style.opacity = (0.55 + Math.random() * 0.45).toFixed(2);
+  balloons.appendChild(el);
+  setTimeout(() => el.remove(), 18000);
+}
+
+function startBalloons() {
+  spawnBalloon(); spawnBalloon();
+  balloonTimer = setInterval(spawnBalloon, 1800);
+}
+
+/* ============================================================
+   特效画布：彩带 + 烟花
+   ============================================================ */
+const canvas = $('fx');
+const ctx = canvas.getContext('2d');
+let W = 0, H = 0;
+
+function resizeCanvas() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  W = window.innerWidth; H = window.innerHeight;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+const PALETTE = ['#ff6b9d', '#ffd93d', '#6bcbff', '#a8e06b', '#ff9f43', '#c084fc', '#ff5e5e', '#4dd0e1'];
+const particles = [];      // 所有特效粒子（彩带碎屑 / 烟花碎片）
+const rockets = [];        // 上升中的烟花弹
+
+/* --- 彩带碎屑 --- */
+function burstConfetti(x, y, count, spread) {
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 2 + Math.random() * (spread || 6);
+    const shape = Math.random() < 0.6 ? 'rect' : 'circle';
+    particles.push({
+      type: 'confetti',
+      shape: shape,
+      x: x, y: y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 3,
+      w: shape === 'rect' ? (5 + Math.random() * 7) : (3 + Math.random() * 5),
+      h: shape === 'rect' ? (8 + Math.random() * 8) : 0,
+      color: PALETTE[Math.floor(Math.random() * PALETTE.length)],
+      rot: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 0.25,
+      life: 1,
+      decay: 0.008 + Math.random() * 0.012,
+      gravity: 0.06
+    });
+  }
+}
+
+/* --- 烟花 --- */
+function launchFirework(x, y) {
+  const color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+  rockets.push({
+    x: x, y: H + 6,
+    tx: x, ty: y - 40 - Math.random() * 90,
+    vy: -(7 + Math.random() * 3.5),
+    color: color
+  });
+}
+
+function explode(x, y, color) {
+  const count = 56 + Math.floor(Math.random() * 34);
+  for (let i = 0; i < count; i++) {
+    const angle = (Math.PI * 2 / count) * i + Math.random() * 0.2;
+    const speed = 1.5 + Math.random() * 3.6;
+    particles.push({
+      type: 'spark',
+      x: x, y: y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      color: Math.random() < 0.75 ? color : PALETTE[Math.floor(Math.random() * PALETTE.length)],
+      life: 1,
+      decay: 0.012 + Math.random() * 0.02,
+      gravity: 0.045,
+      trail: Math.random() < 0.4
+    });
+  }
+}
+
+/* --- 主循环 --- */
+let fxRunning = false;
+function fxLoop() {
+  if (!fxRunning) return;
+  ctx.clearRect(0, 0, W, H);
+
+  // 彩带碎屑
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    if (p.type === 'confetti') {
+      p.vy += p.gravity;
+      p.x += p.vx + Math.sin(p.life * 6) * 0.6;
+      p.y += p.vy;
+      p.rot += p.vr;
+    } else {
+      p.vy += p.gravity;
+      p.x += p.vx;
+      p.y += p.vy;
+    }
+    p.life -= p.decay;
+    if (p.life <= 0 || p.y > H + 30) { particles.splice(i, 1); continue; }
+    ctx.save();
+    ctx.globalAlpha = Math.max(p.life, 0);
+    ctx.fillStyle = p.color;
+    if (p.type === 'confetti') {
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      if (p.shape === 'rect') ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      else { ctx.beginPath(); ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2); ctx.fill(); }
+    } else {
+      ctx.beginPath(); ctx.arc(p.x, p.y, 2.2, 0, Math.PI * 2); ctx.fill();
+      if (p.trail) {
+        ctx.globalAlpha = Math.max(p.life, 0) * 0.4;
+        ctx.beginPath(); ctx.arc(p.x - p.vx * 2.5, p.y - p.vy * 2.5, 1.3, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
+  // 烟花弹上升
+  for (let i = rockets.length - 1; i >= 0; i--) {
+    const r = rockets[i];
+    r.y += r.vy;
+    r.x += (r.tx - r.x) * 0.08;
+    ctx.save();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = r.color;
+    ctx.beginPath(); ctx.arc(r.x, r.y, 2.6, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+    if (r.y <= r.ty) {
+      explode(r.x, r.y, r.color);
+      rockets.splice(i, 1);
+    }
+  }
+
+  requestAnimationFrame(fxLoop);
+}
+function startFX() { if (!fxRunning) { fxRunning = true; fxLoop(); } }
+
+/* --- 点击任意处放烟花 --- */
+document.addEventListener('pointerdown', (e) => {
+  if (e.target.closest('button')) return;   // 点按钮不放烟花
+  launchFirework(e.clientX, e.clientY);
+});
+
+/* --- 周期性小彩带 --- */
+let confettiTimer = null;
+function startPeriodicConfetti() {
+  confettiTimer = setInterval(() => {
+    burstConfetti(-10, Math.random() * H * 0.4, 36, 5);
+    burstConfetti(W + 10, Math.random() * H * 0.4, 36, 5);
+  }, 6500);
+}
+
+/* ============================================================
+   背景音乐
+   ============================================================ */
+const bgm = $('bgm');
+const musicBtn = $('musicBtn');
+bgm.volume = 0.7;
+
+function playMusic() {
+  bgm.play().catch(() => { /* 个别浏览器拦截时静默处理 */ });
+}
+function toggleMusic() {
+  if (bgm.paused) { playMusic(); musicBtn.classList.add('playing'); }
+  else { bgm.pause(); musicBtn.classList.remove('playing'); }
+}
+musicBtn.addEventListener('click', toggleMusic);
+
+/* ============================================================
+   惊喜礼物盒
+   ============================================================ */
+const giftsGrid = $('giftsGrid');
+const lightbox = $('lightbox');
+const lbImg = $('lbImg');
+const lbCount = $('lbCount');
+const lbPrev = $('lbPrev');
+const lbNext = $('lbNext');
+let lbIndex = 0;
+let giftOpening = false;
+
+/* 预加载所有照片，拆礼物时零延迟 */
+PHOTOS.forEach(src => { const im = new Image(); im.src = src; });
+
+function buildGifts() {
+  giftsGrid.innerHTML = '';
+  PHOTOS.forEach((src, i) => {
+    const g = document.createElement('div');
+    g.className = 'gift';
+    g.innerHTML = '<span class="gift-emoji">🎁</span><span class="gift-tag">' + (i + 1) + '</span>';
+    g.addEventListener('click', () => onGiftClick(i, g));
+    giftsGrid.appendChild(g);
+  });
+}
+
+function onGiftClick(i, el) {
+  /* 已拆开的礼物：再次点击直接看大图 */
+  if (el.classList.contains('opened')) { showLightbox(i); return; }
+  if (giftOpening) return;
+  giftOpening = true;
+  el.classList.add('shaking');
+  setTimeout(() => {
+    el.classList.remove('shaking');
+    el.classList.add('opened');
+    /* 礼物盒变成照片小缩略图 */
+    el.innerHTML = '';
+    const im = document.createElement('img');
+    im.src = PHOTOS[i];
+    im.alt = '照片 ' + (i + 1);
+    el.appendChild(im);
+    giftOpening = false;
+    /* 拆开瞬间：彩带庆祝 + 打开大图 */
+    const r = el.getBoundingClientRect();
+    burstConfetti(r.left + r.width / 2, r.top + r.height / 2, 70, 6);
+    showLightbox(i);
+  }, 520);
+}
+
+/* --- 照片灯箱 --- */
+function showLightbox(i) {
+  lbIndex = i;
+  lbImg.src = PHOTOS[i];
+  lbCount.textContent = PHOTOS.length > 1 ? (i + 1) + ' / ' + PHOTOS.length : '';
+  lbPrev.classList.toggle('hidden', PHOTOS.length <= 1);
+  lbNext.classList.toggle('hidden', PHOTOS.length <= 1);
+  lightbox.classList.add('show');
+}
+function hideLightbox() { lightbox.classList.remove('show'); }
+lbPrev.addEventListener('click', () => showLightbox((lbIndex - 1 + PHOTOS.length) % PHOTOS.length));
+lbNext.addEventListener('click', () => showLightbox((lbIndex + 1) % PHOTOS.length));
+$('lbClose').addEventListener('click', hideLightbox);
+lightbox.addEventListener('click', (e) => { if (e.target === lightbox) hideLightbox(); });
+
+/* ============================================================
+   祝福语滚动出现
+   ============================================================ */
+const blessCard = $('blessCard');
+const blessObserver = new IntersectionObserver((entries) => {
+  entries.forEach(en => { if (en.isIntersecting) { blessCard.classList.add('show'); blessObserver.disconnect(); } });
+}, { threshold: 0.3 });
+blessObserver.observe(blessCard);
+
+/* ============================================================
+   开启祝福：进入主页面
+   ============================================================ */
+$('openBtn').addEventListener('click', () => {
+  $('intro').classList.add('fade-out');
+  playMusic();
+  musicBtn.classList.add('playing');
+  startFX();
+  startBalloons();
+  startPeriodicConfetti();
+
+  // 开场彩带 x3
+  burstConfetti(W / 2, H * 0.3, 150, 7);
+  setTimeout(() => burstConfetti(W * 0.25, H * 0.2, 80, 6), 250);
+  setTimeout(() => burstConfetti(W * 0.75, H * 0.2, 80, 6), 450);
+  // 开场烟花 x3
+  setTimeout(() => launchFirework(W * 0.3, H * 0.3), 400);
+  setTimeout(() => launchFirework(W * 0.7, H * 0.25), 700);
+  setTimeout(() => launchFirework(W * 0.5, H * 0.4), 1000);
+
+  setTimeout(() => {
+    $('intro').style.display = 'none';
+    $('main').classList.add('show');
+    musicBtn.classList.remove('hidden');
+    buildGifts();
+  }, 600);
+});
+
+/* 页面切走时暂停动画（节省性能） */
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { clearInterval(confettiTimer); clearInterval(balloonTimer); }
+  else { if ($('main').classList.contains('show')) { startPeriodicConfettiSafe(); startBalloonsSafe(); } }
+});
+function startPeriodicConfettiSafe() {
+  clearInterval(confettiTimer);
+  confettiTimer = setInterval(() => {
+    burstConfetti(-10, Math.random() * H * 0.4, 36, 5);
+    burstConfetti(W + 10, Math.random() * H * 0.4, 36, 5);
+  }, 6500);
+}
+function startBalloonsSafe() {
+  clearInterval(balloonTimer);
+  balloonTimer = setInterval(spawnBalloon, 1800);
+}
+</script>
+</body>
+</html>
